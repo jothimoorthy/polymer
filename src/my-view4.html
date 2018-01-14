@@ -1,0 +1,212 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view4">
+    <template>
+
+        <style include="shared-styles">
+            paper-input {
+                max-width: 400px;
+                margin: auto;
+            }
+
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+        </style>
+
+        <iron-ajax auto url="http://localhost:8081/src/data.json" handle-as="json" on-response="handleResponse" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="http://jsonplaceholder.typicode.com/posts" handle-as="json" debounce-duration="300" on-response="postHandler">
+        </iron-ajax>
+
+        <div class="card">
+            <div class="circle">4</div>
+            <h1>View four</h1>
+            <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
+            <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe
+                pertinax ei, ad pri animal labores suscipiantur.</p>
+        </div>
+
+        <div class="card">
+            <h1>IRON FORM</h1>
+            <p>{{ ajaxresponse }}</p>
+            <iron-form id="myForm">
+                <form method="get" action="">
+                    <paper-input value="{{Person.firstname}}" name="username" pattern="[a-zA-Z]*" error-message="letters only!" label="Username"
+                        required auto-validate></paper-input>
+                    <paper-input value="{{Person.password}}" name="password" label="Password" required auto-validate></paper-input>
+
+                    <paper-button id="myFormSubmit" raised disabled on-click="submitForm">Submit</paper-button>
+
+                </form>
+            </iron-form>
+
+
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+
+        <div class="card">
+            <paper-checkbox name="papercheckbox" checked on-click="checkBoxClicked">Checked</paper-checkbox>
+            <paper-checkbox name="papercheckbox" class="styled">
+                Checkbox
+                <span class="subtitle">
+                    With a longer label
+                </span>
+            </paper-checkbox>
+            <paper-checkbox disabled>Disabled</paper-checkbox>
+            <br>
+            <paper-dropdown-menu label="Dinosaurs">
+                <paper-listbox slot="dropdown-content" selected="1">
+                    <paper-item>allosaurus</paper-item>
+                    <paper-item>brontosaurus</paper-item>
+                    <paper-item>carcharodontosaurus</paper-item>
+                    <paper-item>diplodocus</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
+            <br>
+            <br>
+            <paper-input always-float-label label="Floating label" value="{{textbox}}"></paper-input>
+            <paper-input label="username">
+                <iron-icon icon="mail" slot="prefix"></iron-icon>
+                <div slot="suffix">@email.com</div>
+            </paper-input>
+
+            <br>
+            <br>
+            <paper-radio-group selected="small" allow-empty-selection>
+                <paper-radio-button name="small">Small</paper-radio-button>
+                <paper-radio-button name="medium">Medium</paper-radio-button>
+                <paper-radio-button name="large">Large</paper-radio-button>
+            </paper-radio-group>
+
+            <br>
+            <br>
+
+            <paper-button class="pink">link</paper-button>
+            <paper-button raised class="indigo">raised</paper-button>
+            <paper-button toggles raised class="green">toggles</paper-button>
+            <paper-button disabled class="disabled">disabled</paper-button>
+
+        </div>
+
+
+        <p>{{ users }}</p>
+        <vaadin-grid items="[[users]]" column-reordering-allowed multi-sort>
+
+            <vaadin-grid-selection-column auto-select frozen> </vaadin-grid-selection-column>
+
+            <vaadin-grid-column width="9em" resizable>
+                <template class="header">
+                    <vaadin-grid-sorter path="id">First Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.id]]</template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column width="9em" resizable>
+                <template class="header">
+                    <vaadin-grid-sorter path="title">Last Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.title]]</template>
+            </vaadin-grid-column>
+
+            <vaadin-grid-column width="15em" flex-grow="2" resizable>
+                <template class="header">
+                    <vaadin-grid-sorter path="id">Address</vaadin-grid-sorter>
+                </template>
+                <template>[[item.id]]</template>
+            </vaadin-grid-column>
+
+        </vaadin-grid>
+
+    </template>
+
+
+
+    <script>
+        class MyView4 extends Polymer.Element {
+            static get is() { return 'my-view4'; }
+
+            static get properties() {
+                return {
+                    textbox: {
+                        type: String,
+                        value: "12345"
+                    },
+                    Person: {
+                        type: Object,
+                        value: {},
+
+
+                    }
+                }
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                const myForm = this.$.myForm;
+                const myFormSubmit = this.$.myFormSubmit;
+
+                myForm.addEventListener('change', function (event) {
+
+                    myFormSubmit.disabled = !myForm.validate();
+                });
+
+
+            }
+
+            submitForm(e) {
+                console.dir(this.Person);
+            }
+
+
+
+            handleResponse(e) {
+                var response = e.detail.response;
+                this.ajaxresponse = JSON.stringify(response);
+            }
+
+            postHandler(e) {
+                var response = e.detail.response;
+                this.users = response;
+                console.log(this.users)
+                console.log(typeof this.users)
+            }
+
+
+        }
+
+        window.customElements.define(MyView4.is, MyView4);
+    </script>
+</dom-module>
